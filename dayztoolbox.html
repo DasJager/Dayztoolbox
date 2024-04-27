@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DayZ Toolbox - Multi-tool for DayZ</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+         body {
+            background-color: #d7d9db; /* Light gray background */
+            color: #333; /* Darker text for contrast */
+            padding-top: 50px;
+            padding-bottom: 50px;
+        }
+        .tab-content {
+            margin-top: 20px;
+        }
+        .header {
+            background-color: #5b5f64; /* Dark gray background for header */
+            border-bottom: 1px solid #434749; /* Slightly darker border color */
+            padding: 10px 0;
+        }
+        .header h1 {
+            text-align: center;
+            color: #c4c6c8; /* Light gray text for contrast */
+        }
+        footer {
+            background-color: #404448; /* Footer background */
+            color: #fff; /* White text color */
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #2c2f33; /* Very dark gray border */
+        }
+        a, .btn-primary {
+            color: #fff; /* White text for links */
+            background-color: #6c757d; /* Bootstrap secondary color adjusted */
+            border-color: #5a6268; /* Darker border color */
+        }
+        a:hover, .btn-primary:hover {
+            background-color: #5a6268; /* Darker on hover */
+            border-color: #545b62;
+        }
+        .alert-info {
+            background-color: #495057; /* Dark slate background */
+            color: #b1b4b6; /* Soft light gray text */
+            border-color: #343a40; /* Border slightly darker than background */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>DayZ Toolbox</h1>
+        </div>
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#textToMarket">Text to Market Converter</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#extractTypeNames">Extract Type Names</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#convertToTrader">Convert to Trader Format</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#videoTutorial"> Video Tutorial</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#donation">Donation Section</a>
+            </li>
+            
+        </ul>
+
+        <div class="tab-content">
+            <div id="textToMarket" class="container tab-pane active">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <h2 class="text-center mb-4">Text to Market Converter</h2>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Instructions:</strong> Enter each class name on a new line in the first textarea, and each variant name on a new line in the second textarea. Adjust other values as needed. Click "Convert to JSON" to generate Market output.
+                        </div>
+                        <div class="form-group">
+                            <label for="classInput">Enter Class Names (one per line):</label>
+                            <textarea class="form-control" id="classInput" rows="3" placeholder="Enter class names here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="textInput">Enter Variant Names below:</label>
+                            <textarea class="form-control" id="textInput" rows="5" placeholder="Enter variant names here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="attachmentInput">Enter Spawn Attachments (one per line):</label>
+                            <textarea class="form-control" id="attachmentInput" rows="3" placeholder="Enter spawn attachments here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="maxPrice">Max Price Threshold:</label>
+                            <input type="number" class="form-control" id="maxPrice" value="200" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="minPrice">Min Price Threshold:</label>
+                            <input type="number" class="form-control" id="minPrice" value="100" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="sellPercent">Sell Price Percent:</label>
+                            <input type="number" class="form-control" id="sellPercent" value="-1.0" step="0.1">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxStock">Max Stock Threshold:</label>
+                            <input type="number" class="form-control" id="maxStock" value="100" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="minStock">Min Stock Threshold:</label>
+                            <input type="number" class="form-control" id="minStock" value="1" min="0">
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="convertToJSON()">Convert to JSON</button>
+                        <div class="form-group mt-4">
+                            <label for="jsonOutput">JSON output:</label>
+                            <textarea class="form-control" id="jsonOutput" rows="5" placeholder="JSON output will appear here..." readonly></textarea>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            
+            <div id="extractTypeNames" class="container tab-pane fade">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="text-center mb-4">Extract Type Names</h2>
+                        <div class="form-group">
+                            <label for="xmlInput">Paste your XML data here:</label>
+                            <textarea id="xmlInput" class="form-control" rows="5"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="outputType">Output Type:</label>
+                            <select id="outputType" class="form-control">
+                                <option value="plaintext">Plain Text</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="extractTypeNames()">Extract Type Names</button>
+                        <div class="form-group mt-4">
+                            <label for="output">Extracted Type Names:</label>
+                            <textarea id="output" class="form-control" rows="5" readonly></textarea>
+                        </div>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Instructions:</strong> Paste your XML data into the textarea labeled "Paste your XML data here". Choose the desired output type from the dropdown, then click "Extract Type Names". The extracted type names will be displayed in the selected format in the textarea below.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="convertToTrader" class="container tab-pane fade">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <h2 class="text-center mb-4">Convert to Trader Format</h2>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Instructions:</strong> Enter each name on a new line in the textarea above. Set a default value, then click "Convert to Trader Format" to generate the output.
+                        </div>
+                        <div class="form-group">
+                            <label for="namesInput">Enter names below:</label>
+                            <textarea class="form-control" id="namesInput" rows="5" placeholder="Enter names here..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="defaultValue">Default Value:</label>
+                            <input type="number" class="form-control" id="defaultValue" value="0" min="0" placeholder="Enter default value">
+                        </div>
+                        <button class="btn btn-primary btn-block" onclick="convertToTrader()">Convert to Trader Format</button>
+                        <div class="form-group mt-4">
+                            <label for="traderOutput">Trader Format output:</label>
+                            <textarea class="form-control" id="traderOutput" rows="5" placeholder="Trader Format output will appear here..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="videoTutorial" class="container tab-pane fade">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <h2 class="text-center mb-4">Video Tutorial</h2>
+                        <div class="alert alert-info" role="alert">
+                            <strong>Instructions:</strong> Watch this awesome Video Tutorial to learn more about the tool and how to use it effectively.
+                        </div>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe class="embed-responsive-item" id="videoFrame" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="donation" class="container tab-pane fade">
+                <div class="row">
+                    <div class="col-md-8 offset-md-2">
+                        <h2 class="text-center mb-4">Donation secion</h2>
+                        <p>
+                            If you find this tool helpful and would like to support its development, you can make a donation using the following methods:
+                            <P>DogeCoin: DCMQGjXN9y2zGwPzQduUFGwEPxtWvdRFcq</P>
+                            <P>BitCoin: 3CbsHhAtCNb8Q76SoUjYMzZFSb1tqYBemu</P>
+                            <p>Ethereum: 0x3Fa7bea049bbdD7eB5485C170856a22897aF7bDD</p>
+                            <P>XYO: 0xAd878A053b0171cA79c5C9A88acf0424c7357CC3</P>
+                            <p>Donate Paypal:<form action="https://www.paypal.com/donate" method="post" target="_top">
+                                <input type="hidden" name="hosted_button_id" value="SBH92B8VJCVP8" />
+                                <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                                <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                                </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <footer>
+        &copy; 2024 DayZ Toolbox
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Initialization script
+        window.onload = function() {
+            var videoSource = '';
+            var videoFrame = document.getElementById('videoFrame');
+            if (videoSource.includes('youtube.com') || videoSource.includes('youtu.be')) {
+                var videoId = extractYouTubeVideoId(videoSource);
+                var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                videoFrame.src = embedUrl;
+            } else {
+                videoFrame.src = videoSource;
+            }
+        }
+    
+        function extractYouTubeVideoId(url) {
+            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            if (match && match[2].length === 11) {
+                return match[2];
+            } else {
+                alert('Invalid YouTube Video URL');
+            }
+        }
+    
+// Text to Market Converter
+function convertToJSON() {
+    const classInput = document.getElementById('classInput').value.trim();
+    const textInput = document.getElementById('textInput').value.trim();
+    const attachmentInput = document.getElementById('attachmentInput').value.trim();
+    const maxPrice = document.getElementById('maxPrice').value.trim();
+    const minPrice = document.getElementById('minPrice').value.trim();
+    const sellPercent = document.getElementById('sellPercent').value.trim();
+    const maxStock = document.getElementById('maxStock').value.trim();
+    const minStock = document.getElementById('minStock').value.trim();
+    
+    const classNames = classInput.split('\n').filter(name => name.trim() !== '');
+    const variants = textInput.split('\n').filter(name => name.trim() !== '').map(name => `"${name.trim()}"`);
+    const attachments = attachmentInput.split('\n').filter(name => name.trim() !== '').map(name => `"${name.trim()}"`);
+
+    let jsonOutput = classNames.map(className => `{
+        "ClassName": "${className.trim()}",
+        "MaxPriceThreshold": ${maxPrice},
+        "MinPriceThreshold": ${minPrice},
+        "SellPricePercent": ${sellPercent},
+        "MaxStockThreshold": ${maxStock},
+        "MinStockThreshold": ${minStock},
+        "QuantityPercent": -1,
+        "SpawnAttachments": [${attachments.join(', ')}],
+        "Variants": [${variants.join(', ')}]
+    }`).join(',\n');
+
+    document.getElementById('jsonOutput').value = `${jsonOutput}`;
+}
+
+
+    
+        // Extract Type Names
+        function extractTypeNames() {
+            var xmlInput = document.getElementById("xmlInput").value.trim();
+            var outputType = document.getElementById("outputType").value;
+            var lines = xmlInput.split('\n');
+            var typeNames = lines.map(line => {
+                var match = line.match(/<type name="([^"]+)">/);
+                return match ? match[1] : null;
+            }).filter(name => name !== null);
+            var formattedOutput = outputType === 'json' ? JSON.stringify(typeNames.reduce((acc, name) => {
+                acc[name] = 75;
+                return acc;
+            }, {}), null, 4) : typeNames.join('\n');
+            document.getElementById("output").value = formattedOutput;
+        }
+    
+// Convert to Trader Format
+function convertToTrader() {
+    const namesInput = document.getElementById('namesInput').value.trim();
+    const defaultValue = document.getElementById('defaultValue').value.trim() || '0'; // Use '0' if no value is entered
+    const names = namesInput.split('\n');
+    let traderOutput = names.filter(name => name.trim() !== '').reduce((acc, name) => {
+        acc[name.trim()] = Number(defaultValue); // Apply the default value to each name
+        return acc;
+    }, {});
+    document.getElementById('traderOutput').value = JSON.stringify(traderOutput, null, 4);
+}
+
+        </script>
+</body>
+</html>
